@@ -1,6 +1,6 @@
 {
   "name": "@fnando/cnpj",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Validate, generate and format CNPJ numbers",
   "main": "dist/cnpj.js",
   "module": "src/cnpj.js",
