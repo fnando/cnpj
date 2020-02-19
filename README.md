@@ -6,13 +6,16 @@
 ![Minified size](http://img.badgesize.io/fnando/cnpj/master/dist/cnpj.min.js.svg?label=min+size)
 ![Minified+Gzip size](http://img.badgesize.io/fnando/cnpj/master/dist/cnpj.min.js.svg?compression=gzip&label=min%2Bgzip+size)
 
-This package does some [CNPJ](http://en.wikipedia.org/wiki/CNPJ) magic. It allows you to create, validate and format CNPJ documents.
+This package does some [CNPJ](http://en.wikipedia.org/wiki/CNPJ) magic. It
+allows you to create, validate and format CNPJ documents.
 
-**HINT:** Check out the CPF counter part available at <https://github.com/fnando/cpf>.
+**HINT:** Check out the CPF counter part available at
+<https://github.com/fnando/cpf>.
 
 ## Installation
 
-This lib is available as a NPM package. To install it, use the following command:
+This lib is available as a NPM package. To install it, use the following
+command:
 
 ```
 npm install @fnando/cnpj --save
@@ -28,11 +31,11 @@ yarn add @fnando/cnpj
 
 ```js
 // Node.js-specific
-const cnpj = require("@fnando/cnpj/dist/node");
+const cnpj = require("@fnando/cnpj/commonjs");
 
 // @import
 import * as cnpj from "@fnando/cnpj"; // import the whole library
-import {isValid as isValidCnpj} from "@fnando/cnpj"; // import just one function
+import { isValid as isValidCnpj } from "@fnando/cnpj"; // import just one function
 
 // import via <script>; the lib will available as window.cnpj
 // <script src="cnpj.js"></script>
@@ -56,9 +59,12 @@ cnpj.generate(); // generate unformatted number
 //=> 07033324230766
 ```
 
+On the web, without transformation, just use `web/cnpj.min.js`.
+
 ### Strict Validation
 
-By default, validations will strip any characters you provide. This means that the following is valid, because only numbers will be considered:
+By default, validations will strip any characters you provide. This means that
+the following is valid, because only numbers will be considered:
 
 ```js
 cnpj.isValid("41#381#074-----6738\n\n65");

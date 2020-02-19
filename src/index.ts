@@ -9,7 +9,7 @@ const REJECT_LIST = [
   "66666666666666",
   "77777777777777",
   "88888888888888",
-  "99999999999999"
+  "99999999999999",
 ];
 
 const STRICT_STRIP_REGEX = /[-\/.]/g;
@@ -24,7 +24,7 @@ const LOOSE_STRIP_REGEX = /[^\d]/g;
  * @param {string} numbers the CNPJ string with only numbers.
  * @returns {number} the verifier digit.
  */
-export function verifierDigit(numbers) {
+export function verifierDigit(numbers: string): number {
   let index = 2;
   const reverse = numbers.split("").reduce(function(buffer, number) {
     return [parseInt(number, 10)].concat(buffer);
@@ -32,12 +32,12 @@ export function verifierDigit(numbers) {
 
   const sum = reverse.reduce(function(buffer, number) {
     buffer += number * index;
-    index = (index === 9 ? 2 : index + 1);
+    index = index === 9 ? 2 : index + 1;
     return buffer;
   }, 0);
 
   const mod = sum % 11;
-  return (mod < 2 ? 0 : 11 - mod);
+  return mod < 2 ? 0 : 11 - mod;
 }
 
 /**
@@ -53,10 +53,12 @@ export function verifierDigit(numbers) {
  * @param {string} cnpj the CNPJ.
  * @returns {string} the formatted CNPJ.
  */
-export function format(cnpj) {
-  return strip(cnpj).replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+export function format(cnpj: string): string {
+  return strip(cnpj).replace(
+    /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+    "$1.$2.$3/$4-$5",
+  );
 }
-
 
 /**
  * Remove some characters from the input.
@@ -73,7 +75,7 @@ export function format(cnpj) {
  *                             Otherwise, it will remove all non-digit (`[^\d]`) characters. Optional.
  * @returns {string} the stripped CNPJ.
  */
-export function strip(cnpj, isStrict) {
+export function strip(cnpj: string, isStrict: boolean = false): string {
   const regex = isStrict ? STRICT_STRIP_REGEX : LOOSE_STRIP_REGEX;
   return (cnpj || "").toString().replace(regex, "");
 }
@@ -86,17 +88,23 @@ export function strip(cnpj, isStrict) {
  * @param {boolean} [isStrict] if `true`, it will accept only `digits`, `.` and `-` characters. Optional.
  * @returns {boolean} `true` if CNPJ is valid. Otherwise, `false`.
  */
-export function isValid(cnpj, isStrict) {
+export function isValid(cnpj: string, isStrict: boolean = false): boolean {
   const stripped = strip(cnpj, isStrict);
 
   // CNPJ must be defined
-  if (!stripped) { return false; }
+  if (!stripped) {
+    return false;
+  }
 
   // CNPJ must have 14 chars
-  if (stripped.length !== 14) { return false; }
+  if (stripped.length !== 14) {
+    return false;
+  }
 
   // CNPJ can't be blacklisted
-  if (REJECT_LIST.includes(stripped)) { return false; }
+  if (REJECT_LIST.includes(stripped)) {
+    return false;
+  }
 
   let numbers = stripped.substr(0, 12);
   numbers += verifierDigit(numbers);
@@ -105,7 +113,6 @@ export function isValid(cnpj, isStrict) {
   return numbers.substr(-2) === stripped.substr(-2);
 }
 
-
 /**
  * Generate a random CNPJ.
  *
@@ -113,7 +120,7 @@ export function isValid(cnpj, isStrict) {
  * @param {boolean} [useFormat] if `true`, it will format using `.` and `-`. Optional.
  * @returns {string} the CNPJ.
  */
-export function generate(useFormat) {
+export function generate(useFormat: boolean = false): string {
   let numbers = "";
 
   for (let i = 0; i < 12; i += 1) {
@@ -123,5 +130,5 @@ export function generate(useFormat) {
   numbers += verifierDigit(numbers);
   numbers += verifierDigit(numbers);
 
-  return (useFormat ? format(numbers) : numbers);
+  return useFormat ? format(numbers) : numbers;
 }
