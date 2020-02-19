@@ -1,5 +1,5 @@
-// Blacklist common values.
-const BLACKLIST = [
+// Reject common values.
+const REJECT_LIST = [
   "00000000000000",
   "11111111111111",
   "22222222222222",
@@ -96,7 +96,7 @@ export function isValid(cnpj, isStrict) {
   if (stripped.length !== 14) { return false; }
 
   // CNPJ can't be blacklisted
-  if (BLACKLIST.includes(stripped)) { return false; }
+  if (REJECT_LIST.includes(stripped)) { return false; }
 
   let numbers = stripped.substr(0, 12);
   numbers += verifierDigit(numbers);
