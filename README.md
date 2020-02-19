@@ -3,8 +3,8 @@
 [![Build Status](https://travis-ci.org/fnando/cnpj.svg?branch=master)](https://travis-ci.org/fnando/cnpj)
 [![NPM package version](https://img.shields.io/npm/v/@fnando/cnpj.svg)](https://www.npmjs.com/package/@fnando/cnpj)
 ![License: MIT](https://img.shields.io/npm/l/@fnando/cnpj.svg)
-![Minified size](http://img.badgesize.io/fnando/cnpj/master/dist/cnpj.min.js.svg?label=min+size)
-![Minified+Gzip size](http://img.badgesize.io/fnando/cnpj/master/dist/cnpj.min.js.svg?compression=gzip&label=min%2Bgzip+size)
+![Minified size](http://img.badgesize.io/fnando/cnpj/master/web/cnpj.min.js.svg?label=min+size)
+![Minified+Gzip size](http://img.badgesize.io/fnando/cnpj/master/web/cnpj.min.js.svg?compression=gzip&label=min%2Bgzip+size)
 
 This package does some [CNPJ](http://en.wikipedia.org/wiki/CNPJ) magic. It
 allows you to create, validate and format CNPJ documents.
