@@ -66,7 +66,7 @@ export function format(cnpj: string): string {
  * Example:
  * ```
  * strip('54550[752#0001..$55'); // Result: '54550752000155'
- * strip('54550[752#0001..$55', true); // Result: '54550[752#0001..$55' - Atention!
+ * strip('54550[752#0001..$55', true); // Result: '54550[752#0001..$55' - Attention!
  * ```
  *
  * @export
