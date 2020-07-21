@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.generate = exports.isValid = exports.strip = exports.format = exports.verifierDigit = void 0;
 // Reject common values.
 var REJECT_LIST = [
     "00000000000000",
@@ -26,9 +27,9 @@ var LOOSE_STRIP_REGEX = /[^\d]/g;
  */
 function verifierDigit(numbers) {
     var index = 2;
-    var reverse = numbers.split("").reduce(function (buffer, number) {
-        return [parseInt(number, 10)].concat(buffer);
-    }, []);
+    var reverse = numbers
+        .split("")
+        .reduce(function (buffer, number) { return [parseInt(number, 10)].concat(buffer); }, []);
     var sum = reverse.reduce(function (buffer, number) {
         buffer += number * index;
         index = index === 9 ? 2 : index + 1;
@@ -95,7 +96,6 @@ function isValid(cnpj, isStrict) {
     if (stripped.length !== 14) {
         return false;
     }
-    // CNPJ can't be blacklisted
     if (REJECT_LIST.includes(stripped)) {
         return false;
     }
