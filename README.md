@@ -37,7 +37,7 @@ const cnpj = require("@fnando/cnpj/commonjs");
 import * as cnpj from "@fnando/cnpj"; // import the whole library
 import { isValid as isValidCnpj } from "@fnando/cnpj"; // import just one function
 
-// import via <script>; the lib will available as window.cnpj
+// import via <script>; the lib will available as window.CNPJ
 // <script src="cnpj.js"></script>
 
 cnpj.isValid("41.381.074/6738-65");
