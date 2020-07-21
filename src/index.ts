@@ -26,11 +26,11 @@ const LOOSE_STRIP_REGEX = /[^\d]/g;
  */
 export function verifierDigit(numbers: string): number {
   let index = 2;
-  const reverse = numbers.split("").reduce(function(buffer, number) {
-    return [parseInt(number, 10)].concat(buffer);
-  }, []);
+  const reverse = numbers
+    .split("")
+    .reduce((buffer, number) => [parseInt(number, 10)].concat(buffer), []);
 
-  const sum = reverse.reduce(function(buffer, number) {
+  const sum = reverse.reduce((buffer, number) => {
     buffer += number * index;
     index = index === 9 ? 2 : index + 1;
     return buffer;
@@ -101,7 +101,6 @@ export function isValid(cnpj: string, isStrict: boolean = false): boolean {
     return false;
   }
 
-  // CNPJ can't be blacklisted
   if (REJECT_LIST.includes(stripped)) {
     return false;
   }

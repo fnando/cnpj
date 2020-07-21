@@ -1,6 +1,6 @@
-import * as cnpj from "../src";
+import * as cnpj from "../src/index";
 
-test("blacklists common numbers", () => {
+test("rejects common numbers", () => {
   expect(cnpj.isValid("00000000000000")).toBeFalsy();
   expect(cnpj.isValid("11111111111111")).toBeFalsy();
   expect(cnpj.isValid("22222222222222")).toBeFalsy();
