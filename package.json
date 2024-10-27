@@ -2,15 +2,15 @@
   "name": "@fnando/cnpj",
   "version": "1.0.2",
   "description": "Validate, generate and format CNPJ numbers",
-  "main": "es/index.js",
-  "module": "es/index.js",
+  "main": "es/index.mjs",
+  "module": "es/index.mjs",
   "types": "es/index.d.ts",
   "scripts": {
     "lint": "yarn eslint src",
     "test": "yarn jest",
-    "js:dist": "tsc",
-    "js:dist:web": "webpack --entry ./es/index.js --output ./web/cnpj.min.js --mode production --target web --output-library-export var --output-library CPF --devtool source-map",
-    "js:dist:node": "webpack --entry ./es/index.js --output ./commonjs/index.js --mode production --target node --output-library-target commonjs --devtool source-map",
+    "js:dist": "tsc -m es6 --outDir es --target es6 && mv es/index.js es/index.mjs",
+    "js:dist:web": "webpack --entry ./es/index.mjs --output-path ./web --output-filename cnpj.min.js --mode production --target web --output-library CNPJ --output-library-export var --devtool source-map",
+    "js:dist:node": "tsc -m commonjs --outDir commonjs",
     "dist": "rm -rf {es,commonjs,web} && yarn test && yarn js:dist && yarn js:dist:web && yarn js:dist:node"
   },
   "repository": {
