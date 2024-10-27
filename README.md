@@ -1,13 +1,16 @@
 # CNPJ
 
-[![Build Status](https://travis-ci.org/fnando/cnpj.svg?branch=master)](https://travis-ci.org/fnando/cnpj)
 [![NPM package version](https://img.shields.io/npm/v/@fnando/cnpj.svg)](https://www.npmjs.com/package/@fnando/cnpj)
 ![License: MIT](https://img.shields.io/npm/l/@fnando/cnpj.svg)
-![Minified size](http://img.badgesize.io/fnando/cnpj/master/web/cnpj.min.js.svg?label=min+size)
-![Minified+Gzip size](http://img.badgesize.io/fnando/cnpj/master/web/cnpj.min.js.svg?compression=gzip&label=min%2Bgzip+size)
 
 This package does some [CNPJ](http://en.wikipedia.org/wiki/CNPJ) magic. It
 allows you to create, validate and format CNPJ documents.
+
+> [!NOTE]
+>
+> This library already supports the new alphanumeric CNPJ algorithm that will be
+> available starting July 2026. For more information, see
+> <https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/acoes-e-programas/programas-e-atividades/cnpj-alfanumerico>.
 
 **HINT:** Check out the CPF counter part available at
 <https://github.com/fnando/cpf>.
