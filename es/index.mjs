@@ -1,12 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifierDigit = verifierDigit;
-exports.strip = strip;
-exports.format = format;
-exports.isValid = isValid;
-exports.generate = generate;
 // Reject common values.
-var REJECT_LIST = [
+const REJECT_LIST = [
     "00000000000000",
     "11111111111111",
     "22222222222222",
@@ -18,9 +11,9 @@ var REJECT_LIST = [
     "88888888888888",
     "99999999999999",
 ];
-var STRICT_STRIP_REGEX = /[-\/.]/g;
-var LOOSE_STRIP_REGEX = /[^A-Z\d]/g;
-var CHARS = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const STRICT_STRIP_REGEX = /[-\/.]/g;
+const LOOSE_STRIP_REGEX = /[^A-Z\d]/g;
+const CHARS = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 /**
  * Compute the Verifier Digit (or "Dígito Verificador (DV)" in portuguese) for CNPJ.
  *
@@ -30,15 +23,15 @@ var CHARS = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
  * @param {string} numbers the CNPJ string with only numbers.
  * @returns {number} the verifier digit.
  */
-function verifierDigit(numbers) {
-    var index = 2;
-    var reverse = numbers.reduce(function (buffer, number) { return [number].concat(buffer); }, []);
-    var sum = reverse.reduce(function (buffer, number) {
+export function verifierDigit(numbers) {
+    let index = 2;
+    const reverse = numbers.reduce((buffer, number) => [number].concat(buffer), []);
+    const sum = reverse.reduce((buffer, number) => {
         buffer += number * index;
         index = index === 9 ? 2 : index + 1;
         return buffer;
     }, 0);
-    var mod = sum % 11;
+    const mod = sum % 11;
     return mod < 2 ? 0 : 11 - mod;
 }
 /**
@@ -56,9 +49,8 @@ function verifierDigit(numbers) {
  *                             Otherwise, it will remove all non-digit (`[^A-Z\d]`) characters. Optional.
  * @returns {string} the stripped CNPJ.
  */
-function strip(cnpj, isStrict) {
-    if (isStrict === void 0) { isStrict = false; }
-    var regex = isStrict ? STRICT_STRIP_REGEX : LOOSE_STRIP_REGEX;
+export function strip(cnpj, isStrict = false) {
+    const regex = isStrict ? STRICT_STRIP_REGEX : LOOSE_STRIP_REGEX;
     return (cnpj || "").toString().toUpperCase().replace(regex, "");
 }
 /**
@@ -74,7 +66,7 @@ function strip(cnpj, isStrict) {
  * @param {string} cnpj the CNPJ.
  * @returns {string} the formatted CNPJ.
  */
-function format(cnpj) {
+export function format(cnpj) {
     return strip(cnpj.toUpperCase()).replace(/^([A-Z\d]{2})([A-Z\d]{3})([A-Z\d]{3})([A-Z\d]{4})(\d{2})$/, "$1.$2.$3/$4-$5");
 }
 /**
@@ -85,9 +77,8 @@ function format(cnpj) {
  * @param {boolean} [isStrict] if `true`, it will accept only `digits`, `.` and `-` characters. Optional.
  * @returns {boolean} `true` if CNPJ is valid. Otherwise, `false`.
  */
-function isValid(cnpj, isStrict) {
-    if (isStrict === void 0) { isStrict = false; }
-    var stripped = strip(cnpj, isStrict);
+export function isValid(cnpj, isStrict = false) {
+    const stripped = strip(cnpj, isStrict);
     // CNPJ must be defined
     if (!stripped) {
         return false;
@@ -99,8 +90,8 @@ function isValid(cnpj, isStrict) {
     if (REJECT_LIST.includes(stripped)) {
         return false;
     }
-    var digits = stripped.substr(0, 12).split("");
-    var numbers = digits.map(function (digit) { return digit.charCodeAt(0) - 48; });
+    let digits = stripped.substr(0, 12).split("");
+    let numbers = digits.map((digit) => digit.charCodeAt(0) - 48);
     numbers.push(verifierDigit(numbers));
     numbers.push(verifierDigit(numbers));
     return numbers.slice(12).join("") === stripped.substr(-2);
@@ -112,15 +103,14 @@ function isValid(cnpj, isStrict) {
  * @param {boolean} [useFormat] if `true`, it will format using `.` and `-`. Optional.
  * @returns {string} the CNPJ.
  */
-function generate(useFormat) {
-    if (useFormat === void 0) { useFormat = false; }
-    var digits = [];
-    for (var i = 0; i < 12; i += 1) {
+export function generate(useFormat = false) {
+    let digits = [];
+    for (let i = 0; i < 12; i += 1) {
         digits.push(CHARS[Math.floor(Math.random() * CHARS.length)]);
     }
-    var numbers = digits.map(function (digit) { return digit.charCodeAt(0) - 48; });
+    let numbers = digits.map((digit) => digit.charCodeAt(0) - 48);
     numbers.push(verifierDigit(numbers));
     numbers.push(verifierDigit(numbers));
-    var cnpj = digits.concat(numbers.slice(12)).join("");
+    let cnpj = digits.concat(numbers.slice(12)).join("");
     return useFormat ? format(cnpj) : cnpj;
 }
