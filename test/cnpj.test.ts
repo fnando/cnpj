@@ -21,10 +21,13 @@ test("rejects falsy values", () => {
 
 test("validates formatted strings", () => {
   expect(cnpj.isValid("54.550.752/0001-55")).toBeTruthy();
+  expect(cnpj.isValid("12.ABC.345/01DE-35")).toBeTruthy();
+  expect(cnpj.isValid("12.abc.345/01de-35")).toBeTruthy();
 });
 
 test("validates unformatted strings", () => {
   expect(cnpj.isValid("54550752000155")).toBeTruthy();
+  expect(cnpj.isValid("12ABC34501DE35")).toBeTruthy();
 });
 
 test("validates messed strings", () => {
@@ -35,6 +38,7 @@ test("strictly validates strings", () => {
   expect(cnpj.isValid("54550[752#0001..$55", true)).toBeFalsy();
   expect(cnpj.isValid("54.550.752/0001-55", true)).toBeTruthy();
   expect(cnpj.isValid("54550752000155", true)).toBeTruthy();
+  expect(cnpj.isValid("12.ABC.345/01DE-35", true)).toBeTruthy();
 });
 
 test("returns stripped number", () => {
@@ -43,20 +47,25 @@ test("returns stripped number", () => {
 });
 
 test("returns formatted number", () => {
-  const number = cnpj.format("54550752000155");
-  expect(number).toEqual("54.550.752/0001-55");
+  expect(cnpj.format("54550752000155")).toEqual("54.550.752/0001-55");
+  expect(cnpj.format("12ABC34501DE35")).toEqual("12.ABC.345/01DE-35");
+  expect(cnpj.format("12abc34501de35")).toEqual("12.ABC.345/01DE-35");
 });
 
 test("generates formatted number", () => {
   const number = cnpj.generate(true);
 
-  expect(number).toMatch(/^(\d{2}).(\d{3}).(\d{3})\/(\d{4})-(\d{2})$/);
+  expect(number).toMatch(
+    /^([A-Z\d]{2}).([A-Z\d]{3}).([A-Z\d]{3})\/([A-Z\d]{4})-(\d{2})$/,
+  );
   expect(cnpj.isValid(number)).toBeTruthy();
 });
 
 test("generates unformatted number", () => {
   const number = cnpj.generate();
 
-  expect(number).toMatch(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/);
+  expect(number).toMatch(
+    /^([A-Z\d]{2})([A-Z\d]{3})([A-Z\d]{3})([A-Z\d]{4})(\d{2})$/,
+  );
   expect(cnpj.isValid(number)).toBeTruthy();
 });

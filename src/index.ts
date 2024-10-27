@@ -13,7 +13,8 @@ const REJECT_LIST = [
 ];
 
 const STRICT_STRIP_REGEX = /[-\/.]/g;
-const LOOSE_STRIP_REGEX = /[^\d]/g;
+const LOOSE_STRIP_REGEX = /[^A-Z\d]/g;
+const CHARS = "01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 /**
  * Compute the Verifier Digit (or "Dígito Verificador (DV)" in portuguese) for CNPJ.
@@ -24,11 +25,12 @@ const LOOSE_STRIP_REGEX = /[^\d]/g;
  * @param {string} numbers the CNPJ string with only numbers.
  * @returns {number} the verifier digit.
  */
-export function verifierDigit(numbers: string): number {
+export function verifierDigit(numbers: number[]): number {
   let index = 2;
-  const reverse = numbers
-    .split("")
-    .reduce((buffer, number) => [parseInt(number, 10)].concat(buffer), []);
+  const reverse = numbers.reduce(
+    (buffer, number) => [number].concat(buffer),
+    [],
+  );
 
   const sum = reverse.reduce((buffer, number) => {
     buffer += number * index;
@@ -38,6 +40,26 @@ export function verifierDigit(numbers: string): number {
 
   const mod = sum % 11;
   return mod < 2 ? 0 : 11 - mod;
+}
+
+/**
+ * Remove some characters from the input.
+ *
+ * Example:
+ * ```
+ * strip('54550[752#0001..$55'); // Result: '54550752000155'
+ * strip('54550[752#0001..$55', true); // Result: '54550[752#0001..$55' - Attention!
+ * ```
+ *
+ * @export
+ * @param {string} cnpj the CNPJ text.
+ * @param {boolean} [isStrict] if `true`, it will remove only `.` and `-` characters.
+ *                             Otherwise, it will remove all non-digit (`[^A-Z\d]`) characters. Optional.
+ * @returns {string} the stripped CNPJ.
+ */
+export function strip(cnpj: string, isStrict: boolean = false): string {
+  const regex = isStrict ? STRICT_STRIP_REGEX : LOOSE_STRIP_REGEX;
+  return (cnpj || "").toString().toUpperCase().replace(regex, "");
 }
 
 /**
@@ -54,30 +76,10 @@ export function verifierDigit(numbers: string): number {
  * @returns {string} the formatted CNPJ.
  */
 export function format(cnpj: string): string {
-  return strip(cnpj).replace(
-    /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+  return strip(cnpj.toUpperCase()).replace(
+    /^([A-Z\d]{2})([A-Z\d]{3})([A-Z\d]{3})([A-Z\d]{4})(\d{2})$/,
     "$1.$2.$3/$4-$5",
   );
-}
-
-/**
- * Remove some characters from the input.
- *
- * Example:
- * ```
- * strip('54550[752#0001..$55'); // Result: '54550752000155'
- * strip('54550[752#0001..$55', true); // Result: '54550[752#0001..$55' - Attention!
- * ```
- *
- * @export
- * @param {string} cnpj the CNPJ text.
- * @param {boolean} [isStrict] if `true`, it will remove only `.` and `-` characters.
- *                             Otherwise, it will remove all non-digit (`[^\d]`) characters. Optional.
- * @returns {string} the stripped CNPJ.
- */
-export function strip(cnpj: string, isStrict: boolean = false): string {
-  const regex = isStrict ? STRICT_STRIP_REGEX : LOOSE_STRIP_REGEX;
-  return (cnpj || "").toString().replace(regex, "");
 }
 
 /**
@@ -105,11 +107,12 @@ export function isValid(cnpj: string, isStrict: boolean = false): boolean {
     return false;
   }
 
-  let numbers = stripped.substr(0, 12);
-  numbers += verifierDigit(numbers);
-  numbers += verifierDigit(numbers);
+  let digits = stripped.substr(0, 12).split("");
+  let numbers = digits.map((digit) => digit.charCodeAt(0) - 48);
+  numbers.push(verifierDigit(numbers));
+  numbers.push(verifierDigit(numbers));
 
-  return numbers.substr(-2) === stripped.substr(-2);
+  return numbers.slice(12).join("") === stripped.substr(-2);
 }
 
 /**
@@ -120,14 +123,18 @@ export function isValid(cnpj: string, isStrict: boolean = false): boolean {
  * @returns {string} the CNPJ.
  */
 export function generate(useFormat: boolean = false): string {
-  let numbers = "";
+  let digits = [];
 
   for (let i = 0; i < 12; i += 1) {
-    numbers += Math.floor(Math.random() * 9);
+    digits.push(CHARS[Math.floor(Math.random() * CHARS.length)]);
   }
 
-  numbers += verifierDigit(numbers);
-  numbers += verifierDigit(numbers);
+  let numbers = digits.map((digit) => digit.charCodeAt(0) - 48);
 
-  return useFormat ? format(numbers) : numbers;
+  numbers.push(verifierDigit(numbers));
+  numbers.push(verifierDigit(numbers));
+
+  let cnpj = digits.concat(numbers.slice(12)).join("");
+
+  return useFormat ? format(cnpj) : cnpj;
 }

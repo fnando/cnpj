@@ -1,8 +1,0 @@
----
-sudo: false
-language: node_js
-notifications:
-  email: false
-node_js:
-  - "13"
-  - "12"
